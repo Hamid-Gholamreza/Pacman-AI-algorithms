@@ -30,7 +30,6 @@ class PushButton(QPushButton):
 class MyWindow(QMainWindow):
     def __init__(self):
         super(MyWindow, self).__init__()
-        self.setWindowFlags(QtCore.Qt.WindowCloseButtonHint)
         width=1000
         height=700
         self.setFixedSize(width,height)
@@ -38,20 +37,25 @@ class MyWindow(QMainWindow):
 
         self.rows = 20
         self.columns = 30
+
         self.Buttons = [[0 for _ in range(self.columns)] for __ in range(self.rows)]
        
         self.Styles = {
             "White": """
                 background-color:white;
-                max-height:35px;
-                max-width:35px;
+                max-height:25px;
+                max-width:25px;
                 border :0.5px solid gray;
+                padding-left: 0px;
+                padding-right: 0px;
                 """,
             "Black": """
                 background-color:black;
-                max-height:35px;
-                max-width:35px;
+                max-height:25px;
+                max-width:25px;
                 border :0.5px solid gray;
+                padding-left: 0px;
+                padding-right: 0px;
                 """,
             }
         
@@ -63,6 +67,23 @@ class MyWindow(QMainWindow):
         self.inWidget = QWidget()
         self.layout = QGridLayout(self.inWidget)
         self.vertical.addWidget(self.inWidget)
+
+        self.objectLabel = QtWidgets.QLabel("Object:")
+        self.vertical.addWidget(self.objectLabel, 20, 0)
+        self.objectCombobox = QtWidgets.QComboBox()
+        self.objectCombobox.addItem('Pacman')
+        self.objectCombobox.setFixedWidth(200)
+        self.objectCombobox.setFixedHeight(30)
+        self.vertical.addWidget(self.objectCombobox)
+
+        self.algorithmLabel = QtWidgets.QLabel('Algorithm:')
+        self.vertical.addWidget(self.algorithmLabel, 10)
+        self.algorithmCombobox = QtWidgets.QComboBox()
+        self.algorithmCombobox.addItems(['DFS', 'BFS'])
+        self.algorithmCombobox.setFixedWidth(200)
+        self.algorithmCombobox.setFixedHeight(30)
+        self.vertical.addWidget(self.algorithmCombobox, 10)
+
         self.CreateButtons()
         Widget.setLayout(self.vertical)
         self.setCentralWidget(Widget)
@@ -81,6 +102,7 @@ class MyWindow(QMainWindow):
                     self.Buttons[row][column]=button
                     button.setEnabled(False)
                     self.layout.addWidget(button,row+1,column)
+
 
     
 
