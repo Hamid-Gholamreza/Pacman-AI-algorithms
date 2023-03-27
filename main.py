@@ -10,13 +10,13 @@ from queue import PriorityQueue
 
 
 class PushButton(QPushButton):
-    def __init__(self, text, style,row,column, color, parent=None):
+    def __init__(self, text, style, row, column, color, parent=None):
         super(PushButton, self).__init__(text, parent)
         self.setStyleSheet(style)
         self.setText(text)
         self.setMinimumSize(QSize(35, 35))
         self.setMaximumSize(QSize(35, 35))
-        self.color=color
+        self.color = color
         
 
 
@@ -26,7 +26,7 @@ class MyWindow(QMainWindow):
         super(MyWindow, self).__init__()
         width=1000
         height=700
-        self.setFixedSize(width,height)
+        self.setFixedSize(width, height)
 
 
         self.rows = 20
@@ -56,10 +56,10 @@ class MyWindow(QMainWindow):
 
 
 
-        Widget= QWidget()
+        Widget = QWidget()
         self.vertical = QVBoxLayout()
         self.inWidget = QWidget()
-
+        self.ButtonGroup = QButtonGroup()
 
         self.layout = QGridLayout(self.inWidget)
         self.vertical.addWidget(self.inWidget)
@@ -71,7 +71,7 @@ class MyWindow(QMainWindow):
         self.form.addWidget(self.objectLabel, 0, 0)
 
         self.objectCombobox = QComboBox()
-        self.objectCombobox.addItem('Pacman')
+        self.objectCombobox.addItems(['Packman', 'Food', 'Block'])
         self.objectCombobox.setFixedSize(150, 30)
         self.form.addWidget(self.objectCombobox, 0, 1)
 
@@ -115,8 +115,9 @@ class MyWindow(QMainWindow):
         self.form.addWidget(self.handyStatusLabel, 2, 0)
 
         self.handyStatusCombobox = QComboBox()
-        self.handyStatusCombobox.addItem('UnHandy')
+        self.handyStatusCombobox.addItems(['UnHandy', 'Handy'])
         self.handyStatusCombobox.setFixedSize(180, 30)
+        self.handyStatusCombobox.activated.connect(self.click_change_color)
         self.form.addWidget(self.handyStatusCombobox, 2, 1)
 
         self.generateRandomPatternButton  = QPushButton('Generate Random Pattern')
@@ -149,22 +150,34 @@ class MyWindow(QMainWindow):
         Widget.setLayout(self.vertical)
         self.setCentralWidget(Widget)
 
-
     
     def CreateButtons(self):
         for row in range(self.rows):
             for column in range(self.columns):
-                if (row==0 or row==19) or(column==0 or column==29) :
-                    button = PushButton('', style=self.Styles["Black"],row=row,column=column, color="black")
-                    self.layout.addWidget(button,row + 1, column)
+                if (row == 0 or row == 19) or (column == 0 or column == 29):
+                    button = PushButton('', style=self.Styles["Black"], row=row, column=column, color="black")
+                    self.layout.addWidget(button, row + 1, column)
                 else:
-                    button = PushButton('', style=self.Styles["White"],row=row,column=column, color="white")
-                    self.Buttons[row][column]=button
+                    button = PushButton('', style=self.Styles["White"], row=row, column=column, color="white")
+                    self.Buttons[row][column] = button
                     button.setEnabled(False)
-                    self.layout.addWidget(button,row+1,column)
+                    self.layout.addWidget(button, row+1, column)
+                    self.ButtonGroup.addButton(button)
 
 
-    
+    def click_change_color(self, index):
+        if index == 0:
+            for button in self.ButtonGroup.buttons():
+                button.setEnabled(False)
+        elif index == 1:
+            for button in self.ButtonGroup.buttons():
+                button.setEnabled(True)
+                button.clicked.connect(self.on_button_clicked)
+
+
+    def on_button_clicked(self):
+        sender = self.sender()
+        sender.setStyleSheet("background-color: black")
 
 
 
