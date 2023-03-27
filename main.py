@@ -5,6 +5,7 @@ import random
 import time
 import enum
 from queue import PriorityQueue
+from PyQt5.QtGui import QColor, QPalette
 
 
 
@@ -177,8 +178,10 @@ class MyWindow(QMainWindow):
 
     def on_button_clicked(self):
         sender = self.sender()
-        sender.setStyleSheet("background-color: black")
-
+        if sender.palette().color(sender.backgroundRole()) == QColor('white'):
+            sender.setStyleSheet("background-color: black")
+        else:
+            sender.setStyleSheet("background-color: white")
 
 
 
