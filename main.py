@@ -87,6 +87,7 @@ class MyWindow(QMainWindow):
 
         self.clearButton = QPushButton('Clear')
         self.clearButton.setFixedSize(80, 30)
+        self.clearButton.clicked.connect(self.clear_buttons)
         self.form.addWidget(self.clearButton, 0, 4)
 
         self.algorithmLabel = QLabel('Algorithm:')
@@ -179,11 +180,16 @@ class MyWindow(QMainWindow):
     def on_button_clicked(self):
         sender = self.sender()
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
-            sender.setStyleSheet("background-color: black")
+            sender.setStyleSheet("background-color: black;"
+                                 "border :0.5px solid gray;")
         else:
-            sender.setStyleSheet("background-color: white")
+            sender.setStyleSheet("background-color: white;"
+                                 "border :0.5px solid gray;")
 
-
+    def clear_buttons(self):
+        for button in self.ButtonGroup.buttons():
+            button.setStyleSheet("background-color: white;"
+                                 "border :0.5px solid gray;")
 
 app = QApplication(sys.argv)
 w = MyWindow()
