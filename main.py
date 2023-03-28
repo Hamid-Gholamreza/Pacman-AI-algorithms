@@ -74,6 +74,7 @@ class MyWindow(QMainWindow):
         self.objectCombobox = QComboBox()
         self.objectCombobox.addItems(['Packman', 'Food', 'Block'])
         self.objectCombobox.setFixedSize(150, 30)
+        self.objectCombobox.setEnabled(False)
         self.form.addWidget(self.objectCombobox, 0, 1)
 
         self.density = QLabel("Density:")
@@ -136,6 +137,7 @@ class MyWindow(QMainWindow):
 
         self.timeOfExecutionMessageBox = QPlainTextEdit()
         self.timeOfExecutionMessageBox.setFixedSize(150, 30)
+        self.timeOfExecutionMessageBox.setEnabled(False)
         self.form.addWidget(self.timeOfExecutionMessageBox, 3, 2)
 
         self.openedNodeLabel = QLabel('Opened Node:')
@@ -144,6 +146,7 @@ class MyWindow(QMainWindow):
 
         self.openedNodeMessageBox = QPlainTextEdit()
         self.openedNodeMessageBox.setFixedSize(150, 30)
+        self.openedNodeMessageBox.setEnabled(False)
         self.form.addWidget(self.openedNodeMessageBox, 3, 4)
 
 
@@ -171,25 +174,57 @@ class MyWindow(QMainWindow):
         if index == 0:
             for button in self.ButtonGroup.buttons():
                 button.setEnabled(False)
+            self.objectCombobox.setEnabled(False)
         elif index == 1:
             for button in self.ButtonGroup.buttons():
                 button.setEnabled(True)
-                button.clicked.connect(self.on_button_clicked)
-
+            self.objectCombobox.setEnabled(True)
+            self.objectCombobox.activated.connect(self.object_choosing)
 
     def on_button_clicked(self):
         sender = self.sender()
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
             sender.setStyleSheet("background-color: black;"
                                  "border :0.5px solid gray;")
-        else:
+
+        elif sender.palette().color(sender.backgroundRole()) == QColor('black'):
             sender.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;")
+        sender.setProperty('text', '')
 
     def clear_buttons(self):
         for button in self.ButtonGroup.buttons():
             button.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;")
+            button.setText('')
+
+
+    def object_choosing(self, index):
+        if index == 1:        # food
+            for button in self.ButtonGroup.buttons():
+                button.clicked.connect(self.click_for_food)
+        elif index == 2:        # block
+            for button in self.ButtonGroup.buttons():
+                button.clicked.connect(self.on_button_clicked)
+
+
+    def click_for_food(self):
+        sender = self.sender()
+        if sender.text() == '':
+            font = QFont('Arial', 20)
+            sender.setProperty('text', '•')
+            sender.setFont(font)
+            sender.setStyleSheet("background-color: white;"
+                                 "border :0.5px solid gray;"
+                                 "color: orange")
+
+        elif sender.text() == '•':
+            sender.setProperty('text', '')
+            sender.setStyleSheet("background-color: white;"
+                                 "border :0.5px solid gray;")
+
+
+
 
 app = QApplication(sys.argv)
 w = MyWindow()
