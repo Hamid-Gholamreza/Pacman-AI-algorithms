@@ -169,6 +169,7 @@ class MyWindow(QMainWindow):
                     button.setEnabled(False)
                     self.layout.addWidget(button, row+1, column)
                     self.ButtonGroup.addButton(button)
+                    button.clicked.connect(self.object_choosing)
 
 
     def click_change_color(self, index):
@@ -199,13 +200,13 @@ class MyWindow(QMainWindow):
             button.setText('')
 
 
-    def object_choosing(self, index):
-        if index == 1:        # food
-            for button in self.ButtonGroup.buttons():
-                button.clicked.connect(self.click_for_food)
-        elif index == 2:        # block
-            for button in self.ButtonGroup.buttons():
-                button.clicked.connect(self.on_button_clicked)
+    def object_choosing(self):
+        sender = self.sender()
+        if self.objectCombobox.currentIndex() == 1:    ### for food
+            self.click_for_food()
+
+        elif self.objectCombobox.currentIndex() == 2:  ### for object
+            self.on_button_clicked()
 
 
     def click_for_food(self):
