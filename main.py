@@ -75,6 +75,7 @@ class MyWindow(QMainWindow):
         self.objectCombobox.addItems(['Packman', 'Food', 'Block'])
         self.objectCombobox.setFixedSize(150, 30)
         self.objectCombobox.setEnabled(False)
+        self.objectCombobox.activated.connect(self.object_choosing)
         self.form.addWidget(self.objectCombobox, 0, 1)
 
         self.density = QLabel("Density:")
@@ -179,18 +180,17 @@ class MyWindow(QMainWindow):
             for button in self.ButtonGroup.buttons():
                 button.setEnabled(True)
             self.objectCombobox.setEnabled(True)
-            self.objectCombobox.activated.connect(self.object_choosing)
 
     def on_button_clicked(self):
         sender = self.sender()
+        sender.setProperty('text', '')
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
             sender.setStyleSheet("background-color: black;"
-                                 "border :0.5px solid gray;")
+                                "border :0.5px solid gray;")
 
         elif sender.palette().color(sender.backgroundRole()) == QColor('black'):
             sender.setStyleSheet("background-color: white;"
-                                 "border :0.5px solid gray;")
-        sender.setProperty('text', '')
+                                "border :0.5px solid gray;")
 
     def clear_buttons(self):
         for button in self.ButtonGroup.buttons():
@@ -221,7 +221,8 @@ class MyWindow(QMainWindow):
         elif sender.text() == '•':
             sender.setProperty('text', '')
             sender.setStyleSheet("background-color: white;"
-                                 "border :0.5px solid gray;")
+                                 "border :0.5px solid gray;"
+                                 "color: orange")
 
 
 
