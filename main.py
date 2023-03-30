@@ -6,7 +6,7 @@ import time
 import enum
 from queue import PriorityQueue
 from PyQt5.QtGui import QColor, QPalette
-
+from PyQt5.QtGui import QPixmap, QIcon
 
 
 
@@ -72,7 +72,7 @@ class MyWindow(QMainWindow):
         self.form.addWidget(self.objectLabel, 0, 0)
 
         self.objectCombobox = QComboBox()
-        self.objectCombobox.addItems(['Packman', 'Food', 'Block'])
+        self.objectCombobox.addItems(['Pacman', 'Food', 'Block'])
         self.objectCombobox.setFixedSize(150, 30)
         self.objectCombobox.setEnabled(False)
         self.objectCombobox.activated.connect(self.object_choosing)
@@ -202,7 +202,10 @@ class MyWindow(QMainWindow):
 
     def object_choosing(self):
         sender = self.sender()
-        if self.objectCombobox.currentIndex() == 1:    ### for food
+        if self.objectCombobox.currentIndex() == 0:     ### for pacman
+            self.click_for_pacman()
+
+        elif self.objectCombobox.currentIndex() == 1:    ### for food
             self.click_for_food()
 
         elif self.objectCombobox.currentIndex() == 2:  ### for object
@@ -226,8 +229,19 @@ class MyWindow(QMainWindow):
                                  "color: orange")
 
 
-    def click_for_pacman(self):
-        ...
+    def click_for_pacman(self):              #############################
+        sender = self.sender()
+        pixmap = QPixmap('./images/pacman_icon.png')
+        pixmap = pixmap.scaled(sender.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+        icon = QIcon(pixmap)
+        sender.setIcon(icon)
+
+
+
+
+
+
+
 
 app = QApplication(sys.argv)
 w = MyWindow()
