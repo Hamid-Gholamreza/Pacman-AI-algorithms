@@ -182,7 +182,7 @@ class MyWindow(QMainWindow):
                 button.setEnabled(True)
             self.objectCombobox.setEnabled(True)
 
-    def on_button_clicked(self):
+    def click_for_block(self):
         sender = self.sender()
         sender.setProperty('text', '')
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
@@ -206,7 +206,7 @@ class MyWindow(QMainWindow):
             self.click_for_food()
 
         elif self.objectCombobox.currentIndex() == 2:  ### for object
-            self.on_button_clicked()
+            self.click_for_block()
 
 
     def click_for_food(self):
@@ -226,7 +226,8 @@ class MyWindow(QMainWindow):
                                  "color: orange")
 
 
-
+    def click_for_pacman(self):
+        ...
 
 app = QApplication(sys.argv)
 w = MyWindow()
