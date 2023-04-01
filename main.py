@@ -198,7 +198,7 @@ class MyWindow(QMainWindow):
             button.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;")
             button.setText('')
-
+            button.setIcon(QIcon())
 
     def object_choosing(self):
         sender = self.sender()
