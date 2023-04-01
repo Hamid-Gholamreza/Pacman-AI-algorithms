@@ -7,6 +7,7 @@ import enum
 from queue import PriorityQueue
 from PyQt5.QtGui import QColor, QPalette
 from PyQt5.QtGui import QPixmap, QIcon
+from .Algorithms import *
 
 
 
@@ -174,7 +175,6 @@ class MyWindow(QMainWindow):
                     self.ButtonGroup.addButton(button)
                     button.clicked.connect(self.object_choosing)
 
-
     def click_change_color(self, index):
         if index == 0:
             for button in self.ButtonGroup.buttons():
@@ -214,7 +214,6 @@ class MyWindow(QMainWindow):
         elif self.objectCombobox.currentIndex() == 2:  ### for object
             self.click_for_block()
 
-
     def click_for_food(self):
         sender = self.sender()
         if sender.text() == '':
@@ -230,7 +229,6 @@ class MyWindow(QMainWindow):
             sender.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;"
                                  "color: orange")
-
 
     def click_for_pacman(self):
         sender = self.sender()
