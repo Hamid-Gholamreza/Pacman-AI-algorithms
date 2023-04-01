@@ -151,6 +151,9 @@ class MyWindow(QMainWindow):
         self.form.addWidget(self.openedNodeMessageBox, 3, 4)
 
 
+        self.pacmanFlag = False
+
+
         self.CreateButtons()
         self.vertical.addLayout(self.form)
         Widget.setLayout(self.vertical)
@@ -229,15 +232,17 @@ class MyWindow(QMainWindow):
                                  "color: orange")
 
 
-    def click_for_pacman(self):              #############################
+    def click_for_pacman(self):
         sender = self.sender()
         pixmap = QPixmap('./images/pacman_icon.png')
-        pixmap = pixmap.scaled(sender.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
-        icon = QIcon(pixmap)
-        sender.setIcon(icon)
-
-
-
+        if not self.pacmanFlag:
+            pixmap = pixmap.scaled(sender.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+            icon = QIcon(pixmap)
+            sender.setIcon(icon)
+            self.pacmanFlag = True
+        else:
+            sender.setIcon(QIcon())
+            self.pacmanFlag = False
 
 
 
