@@ -7,7 +7,6 @@ import enum
 from queue import PriorityQueue
 from PyQt5.QtGui import QColor, QPalette
 from PyQt5.QtGui import QPixmap, QIcon
-from .Algorithms import *
 
 
 
@@ -68,6 +67,8 @@ class MyWindow(QMainWindow):
 
         self.form = QGridLayout()
 
+        self.pacman_position = None
+
         self.objectLabel = QLabel("Object:")
         self.objectLabel.setFixedSize(150, 50)
         self.form.addWidget(self.objectLabel, 0, 0)
@@ -90,7 +91,7 @@ class MyWindow(QMainWindow):
 
         self.clearButton = QPushButton('Clear')
         self.clearButton.setFixedSize(80, 30)
-        self.clearButton.clicked.connect(self.clear_buttons)
+        self.clearButton.clicked.connect(self.clear_button)
         self.form.addWidget(self.clearButton, 0, 4)
 
         self.algorithmLabel = QLabel('Algorithm:')
@@ -131,6 +132,7 @@ class MyWindow(QMainWindow):
 
         self.searchButton  = QPushButton('Search')
         self.searchButton.setFixedSize(80, 30)
+        # self.searchButton.clicked.connect(self.search_button)
         self.form.addWidget(self.searchButton, 2, 4)
 
         self.timeOfExecutionLabel = QLabel('Time Of Execution:')
@@ -196,7 +198,7 @@ class MyWindow(QMainWindow):
             sender.setStyleSheet("background-color: white;"
                                 "border :0.5px solid gray;")
 
-    def clear_buttons(self):
+    def clear_button(self):
         for button in self.ButtonGroup.buttons():
             button.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;")
@@ -241,6 +243,19 @@ class MyWindow(QMainWindow):
         else:
             sender.setIcon(QIcon())
             self.pacmanFlag = False
+
+
+
+
+    def search_button(self):
+        ...
+
+
+
+
+
+
+
 
 
 
