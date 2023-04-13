@@ -34,6 +34,10 @@ class MyWindow(QMainWindow):
         self.columns = 30
 
         self.Buttons = [[0 for _ in range(self.columns)] for __ in range(self.rows)]
+        self.list_of_blocks = []
+        self.list_of_foods = []
+        self.pacman = []
+
        
         self.Styles = {
             "White": """
@@ -168,9 +172,11 @@ class MyWindow(QMainWindow):
             for column in range(self.columns):
                 if (row == 0 or row == 19) or (column == 0 or column == 29):
                     button = PushButton('', style=self.Styles["Black"], row=row, column=column, color="black")
+                    button.setObjectName(f"{row}-{column}")
                     self.layout.addWidget(button, row + 1, column)
                 else:
                     button = PushButton('', style=self.Styles["White"], row=row, column=column, color="white")
+                    button.setObjectName(f"{row}-{column}")
                     self.Buttons[row][column] = button
                     button.setEnabled(False)
                     self.layout.addWidget(button, row+1, column)
@@ -193,10 +199,12 @@ class MyWindow(QMainWindow):
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
             sender.setStyleSheet("background-color: black;"
                                 "border :0.5px solid gray;")
+            self.list_of_blocks.append(sender)
 
         elif sender.palette().color(sender.backgroundRole()) == QColor('black'):
             sender.setStyleSheet("background-color: white;"
                                 "border :0.5px solid gray;")
+            self.list_of_blocks.remove(sender)
 
     def clear_button(self):
         for button in self.ButtonGroup.buttons():
@@ -204,6 +212,9 @@ class MyWindow(QMainWindow):
                                  "border :0.5px solid gray;")
             button.setText('')
             button.setIcon(QIcon())
+        self.list_of_blocks = []
+        self.list_of_foods = []
+        self.pacman = []
 
     def object_choosing(self):
         sender = self.sender()
@@ -225,12 +236,14 @@ class MyWindow(QMainWindow):
             sender.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;"
                                  "color: orange")
+            self.list_of_foods.append(sender)
 
         elif sender.text() == '•':
             sender.setProperty('text', '')
             sender.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;"
                                  "color: orange")
+            self.list_of_foods.remove(sender)
 
     def click_for_pacman(self):
         sender = self.sender()
@@ -240,17 +253,18 @@ class MyWindow(QMainWindow):
             icon = QIcon(pixmap)
             sender.setIcon(icon)
             self.pacmanFlag = True
+            self.pacman.append(sender)
         else:
             sender.setIcon(QIcon())
             self.pacmanFlag = False
+            self.pacman.remove(sender)
+        print(len(self.pacman))
 
 
 
 
     def search_button(self):
         ...
-
-
 
 
 
