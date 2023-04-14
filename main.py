@@ -260,7 +260,6 @@ class MyWindow(QMainWindow):
             sender.setIcon(QIcon())
             self.pacmanFlag = False
             self.pacman.remove(sender)
-        print(len(self.pacman))
 
 
 
@@ -268,7 +267,7 @@ class MyWindow(QMainWindow):
         self.clear_button()
         self.list_of_blocks = []
         list_of_blocks = []
-        self.density = self.densityCombobox.currentIndex() + 1
+        self.density = self.densityCombobox.currentIndex() + 1               ##### generate random blocks
         for i in range(0, 19):
             block_number_per_row = int(random.randint(0, 28)/ self.density)
             while len(list_of_blocks) < block_number_per_row:
@@ -277,11 +276,28 @@ class MyWindow(QMainWindow):
                     list_of_blocks.append(random_number)
                     self.list_of_blocks.append(f"{i}-{random_number}")
             list_of_blocks = []
-        # # print(self.list_of_blocks)
+
         for block_id in self.list_of_blocks:
             button = self.findChild(PushButton, block_id)
             button.setStyleSheet("background-color: black;"
                                 "border :0.5px solid gray;")
+
+
+
+        pacman_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")         #### generate random pacman
+        if pacman_button.palette().color(pacman_button.backgroundRole()).name() != 'black':
+            pacman_button.setStyleSheet("background-color: white;"
+                                 "border :0.5px solid gray;")
+            pixmap = QPixmap('./images/pacman_icon.png')
+            pixmap = pixmap.scaled(pacman_button.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+            icon = QIcon(pixmap)
+            self.pacmanFlag = True
+            pacman_button.setIcon(icon)
+            for button in self.ButtonGroup.buttons():
+                button.setEnabled(True)
+
+
+
 
 
 
