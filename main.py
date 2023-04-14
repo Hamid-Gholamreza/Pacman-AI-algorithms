@@ -89,7 +89,7 @@ class MyWindow(QMainWindow):
         self.form.addWidget(self.density, 0, 2)
 
         self.densityCombobox = QComboBox()
-        self.densityCombobox.addItem('4')
+        self.densityCombobox.addItems(['4', '3', '2', '1'])
         self.densityCombobox.setFixedSize(150, 30)
         self.form.addWidget(self.densityCombobox, 0, 3)
 
@@ -130,9 +130,10 @@ class MyWindow(QMainWindow):
         self.handyStatusCombobox.activated.connect(self.click_change_color)
         self.form.addWidget(self.handyStatusCombobox, 2, 1)
 
-        self.generateRandomPatternButton  = QPushButton('Generate Random Pattern')
+        self.generateRandomPatternButton = QPushButton('Generate Random Pattern')
         self.generateRandomPatternButton.setFixedSize(180, 30)
         self.form.addWidget(self.generateRandomPatternButton, 2, 3)
+        self.generateRandomPatternButton.clicked.connect(self.generate_random_pattern_button)
 
         self.searchButton  = QPushButton('Search')
         self.searchButton.setFixedSize(80, 30)
@@ -206,6 +207,7 @@ class MyWindow(QMainWindow):
                                 "border :0.5px solid gray;")
             self.list_of_blocks.remove(sender)
 
+
     def clear_button(self):
         for button in self.ButtonGroup.buttons():
             button.setStyleSheet("background-color: white;"
@@ -262,11 +264,24 @@ class MyWindow(QMainWindow):
 
 
 
-
-    def search_button(self):
-        ...
-
-
+    def generate_random_pattern_button(self):
+        self.clear_button()
+        self.list_of_blocks = []
+        list_of_blocks = []
+        self.density = self.densityCombobox.currentIndex() + 1
+        for i in range(0, 19):
+            block_number_per_row = int(random.randint(0, 28)/ self.density)
+            while len(list_of_blocks) < block_number_per_row:
+                random_number = random.randint(1, 28)
+                if random_number not in list_of_blocks:
+                    list_of_blocks.append(random_number)
+                    self.list_of_blocks.append(f"{i}-{random_number}")
+            list_of_blocks = []
+        # # print(self.list_of_blocks)
+        for block_id in self.list_of_blocks:
+            button = self.findChild(PushButton, block_id)
+            button.setStyleSheet("background-color: black;"
+                                "border :0.5px solid gray;")
 
 
 
