@@ -184,6 +184,7 @@ class MyWindow(QMainWindow):
                     self.ButtonGroup.addButton(button)
                     button.clicked.connect(self.object_choosing)
 
+
     def click_change_color(self, index):
         if index == 0:
             for button in self.ButtonGroup.buttons():
@@ -193,6 +194,7 @@ class MyWindow(QMainWindow):
             for button in self.ButtonGroup.buttons():
                 button.setEnabled(True)
             self.objectCombobox.setEnabled(True)
+
 
     def click_for_block(self):
         sender = self.sender()
@@ -217,6 +219,8 @@ class MyWindow(QMainWindow):
         self.list_of_blocks = []
         self.list_of_foods = []
         self.pacman = []
+        self.pacmanFlag = False
+
 
     def object_choosing(self):
         sender = self.sender()
@@ -228,6 +232,7 @@ class MyWindow(QMainWindow):
 
         elif self.objectCombobox.currentIndex() == 2:  ### for object
             self.click_for_block()
+
 
     def click_for_food(self):
         sender = self.sender()
@@ -247,6 +252,7 @@ class MyWindow(QMainWindow):
                                  "color: orange")
             self.list_of_foods.remove(sender)
 
+
     def click_for_pacman(self):
         sender = self.sender()
         pixmap = QPixmap('./images/pacman_icon.png')
@@ -265,7 +271,6 @@ class MyWindow(QMainWindow):
 
     def generate_random_pattern_button(self):
         self.clear_button()
-        self.list_of_blocks = []
         list_of_blocks = []
         self.density = self.densityCombobox.currentIndex() + 1               ##### generate random blocks
         for i in range(0, 19):
@@ -284,21 +289,33 @@ class MyWindow(QMainWindow):
 
 
 
-        pacman_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")         #### generate random pacman
-        if pacman_button.palette().color(pacman_button.backgroundRole()).name() != 'black':
-            pacman_button.setStyleSheet("background-color: white;"
-                                 "border :0.5px solid gray;")
-            pixmap = QPixmap('./images/pacman_icon.png')
-            pixmap = pixmap.scaled(pacman_button.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
-            icon = QIcon(pixmap)
-            self.pacmanFlag = True
-            pacman_button.setIcon(icon)
-            for button in self.ButtonGroup.buttons():
-                button.setEnabled(True)
+
+
+        for i in range(0, random.randint(1, 504 - (len(self.list_of_blocks) + 1))):
+            food_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")
+            if food_button.palette().color(food_button.backgroundRole()).name() != 'black':
+                food_button.setProperty('text', '•')
+                font = QFont('Arial', 20)
+                food_button.setFont(font)
+                food_button.setStyleSheet("background-color: white;"
+                                     "border :0.5px solid gray;"
+                                     "color: orange")
 
 
 
-
+        while self.pacmanFlag == False:
+            pacman_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")         #### generate random pacman
+            self.pacman = [pacman_button.objectName()]
+            if pacman_button.palette().color(pacman_button.backgroundRole()).name() != 'black' and pacman_button.text() != '•':
+                pacman_button.setStyleSheet("background-color: white;"
+                                     "border :0.5px solid gray;")
+                pixmap = QPixmap('./images/pacman_icon.png')
+                pixmap = pixmap.scaled(pacman_button.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+                icon = QIcon(pixmap)
+                self.pacmanFlag = True
+                pacman_button.setIcon(icon)
+                for button in self.ButtonGroup.buttons():
+                    button.setEnabled(True)
 
 
 
