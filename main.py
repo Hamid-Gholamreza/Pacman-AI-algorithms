@@ -271,35 +271,31 @@ class MyWindow(QMainWindow):
 
     def generate_random_pattern_button(self):
         self.clear_button()
-        list_of_blocks = []
-        self.density = self.densityCombobox.currentIndex() + 1               ##### generate random blocks
-        for i in range(0, 19):
-            block_number_per_row = int(random.randint(0, 28)/ self.density)
-            while len(list_of_blocks) < block_number_per_row:
-                random_number = random.randint(1, 28)
-                if random_number not in list_of_blocks:
-                    list_of_blocks.append(random_number)
-                    self.list_of_blocks.append(f"{i}-{random_number}")
-            list_of_blocks = []
-
-        for block_id in self.list_of_blocks:
-            button = self.findChild(PushButton, block_id)
-            button.setStyleSheet("background-color: black;"
-                                "border :0.5px solid gray;")
 
 
-
-
-
-        for i in range(0, random.randint(1, 504 - (len(self.list_of_blocks) + 1))):
-            food_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")
-            if food_button.palette().color(food_button.backgroundRole()).name() != 'black':
-                food_button.setProperty('text', '•')
-                font = QFont('Arial', 20)
-                food_button.setFont(font)
-                food_button.setStyleSheet("background-color: white;"
+        self.density = self.densityCombobox.currentIndex() + 1             #### generate random block
+        block_number = int(random.randint(0, 504)/ self.density)
+        for i in range(0, block_number):
+            block_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 27)}")
+            block_button.setStyleSheet("background-color: black;"
                                      "border :0.5px solid gray;"
                                      "color: orange")
+            if block_button not in self.list_of_blocks:
+                self.list_of_blocks.append(block_button.objectName())
+
+
+
+
+        # for i in range(0, random.randint(1, 504 - (len(self.list_of_blocks) + 1))):                 #### generate random food
+        #     food_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")
+        #     if food_button.palette().color(food_button.backgroundRole()).name() != 'black':
+        #         food_button.setProperty('text', '•')
+        #         font = QFont('Arial', 20)
+        #         food_button.setFont(font)
+        #         food_button.setStyleSheet("background-color: white;"
+        #                              "border :0.5px solid gray;"
+        #                              "color: orange")
+        #         self.list_of_foods.append(food_button.objectName())
 
 
 
@@ -318,8 +314,7 @@ class MyWindow(QMainWindow):
                     button.setEnabled(True)
 
 
-
-
+        print(len(self.list_of_blocks), block_number)
 
 
 
