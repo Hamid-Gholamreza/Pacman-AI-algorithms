@@ -277,25 +277,26 @@ class MyWindow(QMainWindow):
         block_number = int(random.randint(0, 504)/ self.density)
         for i in range(0, block_number):
             block_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 27)}")
-            block_button.setStyleSheet("background-color: black;"
-                                     "border :0.5px solid gray;"
-                                     "color: orange")
             if block_button not in self.list_of_blocks:
                 self.list_of_blocks.append(block_button.objectName())
+                block_button.setStyleSheet("background-color: black;"
+                                        "border :0.5px solid gray;"
+                                        "color: orange")
 
 
 
 
-        # for i in range(0, random.randint(1, 504 - (len(self.list_of_blocks) + 1))):                 #### generate random food
-        #     food_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")
-        #     if food_button.palette().color(food_button.backgroundRole()).name() != 'black':
-        #         food_button.setProperty('text', '•')
-        #         font = QFont('Arial', 20)
-        #         food_button.setFont(font)
-        #         food_button.setStyleSheet("background-color: white;"
-        #                              "border :0.5px solid gray;"
-        #                              "color: orange")
-        #         self.list_of_foods.append(food_button.objectName())
+
+        for i in range(0, random.randint(1, 504 - (len(self.list_of_blocks) + 1))):                 #### generate random food
+            food_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")
+            if food_button.palette().color(food_button.backgroundRole()).name() != 'black':
+                food_button.setProperty('text', '•')
+                font = QFont('Arial', 20)
+                food_button.setFont(font)
+                food_button.setStyleSheet("background-color: white;"
+                                     "border :0.5px solid gray;"
+                                     "color: orange")
+                self.list_of_foods.append(food_button.objectName())
 
 
 
@@ -314,8 +315,7 @@ class MyWindow(QMainWindow):
                     button.setEnabled(True)
 
 
-        print(len(self.list_of_blocks), block_number)
-
+        print(len(self.list_of_foods))
 
 
 app = QApplication(sys.argv)
