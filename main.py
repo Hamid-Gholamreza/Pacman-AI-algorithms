@@ -178,7 +178,6 @@ class MyWindow(QMainWindow):
                                  "border :0.5px solid gray;")
             self.list_of_blocks.remove(sender.objectName())
             sender.setProperty('is_block', False)
-        print(len(self.list_of_blocks))
 
 
     def clear_button(self):
@@ -223,6 +222,7 @@ class MyWindow(QMainWindow):
                                  "border :0.5px solid gray;"
                                  "color: orange")
             self.list_of_foods.remove(sender.objectName())
+
 
     def click_for_pacman(self):
         sender = self.sender()
@@ -284,7 +284,9 @@ class MyWindow(QMainWindow):
                 for button in self.ButtonGroup.buttons():
                     button.setEnabled(True)
 
-        print(len(self.list_of_blocks))
+
+
+
 app = QApplication(sys.argv)
 w = MyWindow()
 w.setWindowTitle('Searchs Algorithm')
