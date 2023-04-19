@@ -204,16 +204,15 @@ class MyWindow(QMainWindow):
     def click_for_block(self):
         sender = self.sender()
         sender.setProperty('text', '')
-        sender.setIcon(QIcon())
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
             sender.setStyleSheet("background-color: black;"
-                                "border :0.5px solid gray;")
+                                "border :0.5px solid gray; border-image: none;")
             self.list_of_blocks.append(sender.objectName())
             sender.setProperty('is_block', True)
 
         elif sender.palette().color(sender.backgroundRole()) == QColor('black'):
             sender.setStyleSheet("background-color: white;"
-                                "border :0.5px solid gray;")
+                                "border :0.5px solid gray; border-image: none;")
             self.list_of_blocks.remove(sender.objectName())
             sender.setProperty('is_block', False)
 
@@ -246,7 +245,6 @@ class MyWindow(QMainWindow):
 
     def click_for_food(self):
         sender = self.sender()
-        sender.setIcon(QIcon())
         if sender.property('is_food') == False:
             font = QFont('Arial', 20)
             sender.setProperty('text', '•')
@@ -254,7 +252,7 @@ class MyWindow(QMainWindow):
             sender.setFont(font)
             sender.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;"
-                                 "color: orange")
+                                 "color: orange; border-image: none;")
             self.list_of_foods.append(sender.objectName())
 
         elif sender.property('is_food') == True:
@@ -262,23 +260,21 @@ class MyWindow(QMainWindow):
             sender.setProperty('is_food', False)
             sender.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;"
-                                 "color: orange")
+                                 "color: orange; border-image: none;")
             self.list_of_foods.remove(sender.objectName())
 
 
     def click_for_pacman(self):
         sender = self.sender()
-        pixmap = QPixmap('./images/pacman_icon.png')
         sender.setProperty('text', '')
-        if not self.pacmanFlag:
-            pixmap = pixmap.scaled(sender.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
-            icon = QIcon(pixmap)
-            sender.setIcon(icon)
+        if self.pacmanFlag == False:
             self.pacmanFlag = True
+            sender.setStyleSheet("border-image: url(./images/pacman_icon.png) 0 0 0 0 stretch stretch; border-image-width: 10px 10px;")
             self.pacman.append(sender.objectName())
-        else:
-            sender.setIcon(QIcon())
+
+        elif self.pacmanFlag == True:
             self.pacmanFlag = False
+            sender.setStyleSheet("border-image: none;")
             self.pacman.remove(sender.objectName())
 
 
@@ -296,7 +292,7 @@ class MyWindow(QMainWindow):
                 self.list_of_blocks.append(block_button.objectName())
                 block_button.setStyleSheet("background-color: black;"
                                         "border :0.5px solid gray;"
-                                        "color: orange")
+                                        "color: orange;")
 
 
 
@@ -310,7 +306,7 @@ class MyWindow(QMainWindow):
                 food_button.setFont(font)
                 food_button.setStyleSheet("background-color: white;"
                                      "border :0.5px solid gray;"
-                                     "color: orange")
+                                     "color: orange;")
                 self.list_of_foods.append(food_button.objectName())
 
 
@@ -321,13 +317,11 @@ class MyWindow(QMainWindow):
             if pacman_button.property('is_pacman') == False and pacman_button.property('is_food') == False and \
                     pacman_button.property('is_block') == False:
                 pacman_button.setStyleSheet("background-color: white;"
-                                     "border :0.5px solid gray;")
-                pixmap = QPixmap('./images/pacman_icon.png')
+                                     "border :0.5px solid gray; border-image: url(./images/pacman_icon.png) 0 0 0 0 stretch stretch;"
+                                            "border-image-width: 10px 10px;")
                 pacman_button.setProperty('is_pacman', True)
-                pixmap = pixmap.scaled(pacman_button.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
-                icon = QIcon(pixmap)
                 self.pacmanFlag = True
-                pacman_button.setIcon(icon)
+
                 for button in self.ButtonGroup.buttons():
                     button.setEnabled(True)
 
