@@ -200,6 +200,7 @@ class MyWindow(QMainWindow):
     def click_for_block(self):
         sender = self.sender()
         sender.setProperty('text', '')
+        sender.setIcon(QIcon())
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
             sender.setStyleSheet("background-color: black;"
                                 "border :0.5px solid gray;")
@@ -210,7 +211,6 @@ class MyWindow(QMainWindow):
                                 "border :0.5px solid gray;")
             self.list_of_blocks.remove(sender.objectName())
 
-        print(self.list_of_blocks)
 
 
     def clear_button(self):
@@ -239,6 +239,7 @@ class MyWindow(QMainWindow):
 
     def click_for_food(self):
         sender = self.sender()
+        sender.setIcon(QIcon())
         if sender.property('is_food') == False:
             font = QFont('Arial', 20)
             sender.setProperty('text', '•')
@@ -261,6 +262,7 @@ class MyWindow(QMainWindow):
     def click_for_pacman(self):
         sender = self.sender()
         pixmap = QPixmap('./images/pacman_icon.png')
+        sender.setProperty('text', '')
         if not self.pacmanFlag:
             pixmap = pixmap.scaled(sender.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
             icon = QIcon(pixmap)
