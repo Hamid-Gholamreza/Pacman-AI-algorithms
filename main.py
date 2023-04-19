@@ -174,12 +174,13 @@ class MyWindow(QMainWindow):
                 if (row == 0 or row == 19) or (column == 0 or column == 29):
                     button = PushButton('', style=self.Styles["Black"], row=row, column=column, color="black")
                     button.setObjectName(f"{row}-{column}")
+                    button.setProperty('is_food', False)
                     self.layout.addWidget(button, row + 1, column)
                 else:
                     button = PushButton('', style=self.Styles["White"], row=row, column=column, color="white")
                     button.setObjectName(f"{row}-{column}")
                     self.Buttons[row][column] = button
-                    button.setEnabled(False)
+                    button.setProperty('is_food', False)
                     self.layout.addWidget(button, row+1, column)
                     self.ButtonGroup.addButton(button)
                     button.clicked.connect(self.object_choosing)
@@ -202,12 +203,14 @@ class MyWindow(QMainWindow):
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
             sender.setStyleSheet("background-color: black;"
                                 "border :0.5px solid gray;")
-            self.list_of_blocks.append(sender)
+            self.list_of_blocks.append(sender.objectName())
 
         elif sender.palette().color(sender.backgroundRole()) == QColor('black'):
             sender.setStyleSheet("background-color: white;"
                                 "border :0.5px solid gray;")
-            self.list_of_blocks.remove(sender)
+            self.list_of_blocks.remove(sender.objectName())
+
+        print(self.list_of_blocks)
 
 
     def clear_button(self):
@@ -236,21 +239,23 @@ class MyWindow(QMainWindow):
 
     def click_for_food(self):
         sender = self.sender()
-        if sender.text() == '':
+        if sender.property('is_food') == False:
             font = QFont('Arial', 20)
             sender.setProperty('text', '•')
+            sender.setProperty('is_food', True)
             sender.setFont(font)
             sender.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;"
                                  "color: orange")
-            self.list_of_foods.append(sender)
+            self.list_of_foods.append(sender.objectName())
 
-        elif sender.text() == '•':
+        elif sender.property('is_food') == True:
             sender.setProperty('text', '')
+            sender.setProperty('is_food', False)
             sender.setStyleSheet("background-color: white;"
                                  "border :0.5px solid gray;"
                                  "color: orange")
-            self.list_of_foods.remove(sender)
+            self.list_of_foods.remove(sender.objectName())
 
 
     def click_for_pacman(self):
@@ -261,61 +266,61 @@ class MyWindow(QMainWindow):
             icon = QIcon(pixmap)
             sender.setIcon(icon)
             self.pacmanFlag = True
-            self.pacman.append(sender)
+            self.pacman.append(sender.objectName())
         else:
             sender.setIcon(QIcon())
             self.pacmanFlag = False
-            self.pacman.remove(sender)
+            self.pacman.remove(sender.objectName())
 
 
 
     def generate_random_pattern_button(self):
         self.clear_button()
 
-
-        self.density = self.densityCombobox.currentIndex() + 1             #### generate random block
-        block_number = int(random.randint(0, 504)/ self.density)
-        for i in range(0, block_number):
-            block_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 27)}")
-            if block_button not in self.list_of_blocks:
-                self.list_of_blocks.append(block_button.objectName())
-                block_button.setStyleSheet("background-color: black;"
-                                        "border :0.5px solid gray;"
-                                        "color: orange")
-
-
-
-
-
-        for i in range(0, random.randint(1, 504 - (len(self.list_of_blocks) + 1))):                 #### generate random food
-            food_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")
-            if food_button.palette().color(food_button.backgroundRole()).name() != 'black':
-                food_button.setProperty('text', '•')
-                font = QFont('Arial', 20)
-                food_button.setFont(font)
-                food_button.setStyleSheet("background-color: white;"
-                                     "border :0.5px solid gray;"
-                                     "color: orange")
-                self.list_of_foods.append(food_button.objectName())
-
-
-
-        while self.pacmanFlag == False:
-            pacman_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")         #### generate random pacman
-            self.pacman = [pacman_button.objectName()]
-            if pacman_button.palette().color(pacman_button.backgroundRole()).name() != 'black' and pacman_button.text() != '•':
-                pacman_button.setStyleSheet("background-color: white;"
-                                     "border :0.5px solid gray;")
-                pixmap = QPixmap('./images/pacman_icon.png')
-                pixmap = pixmap.scaled(pacman_button.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
-                icon = QIcon(pixmap)
-                self.pacmanFlag = True
-                pacman_button.setIcon(icon)
-                for button in self.ButtonGroup.buttons():
-                    button.setEnabled(True)
-
-
-        print(len(self.list_of_foods))
+        #
+        # self.density = self.densityCombobox.currentIndex() + 1             #### generate random block
+        # block_number = int(random.randint(0, 504)/ self.density)
+        # for i in range(0, block_number):
+        #     block_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 27)}")
+        #     if block_button not in self.list_of_blocks:
+        #         self.list_of_blocks.append(block_button.objectName())
+        #         block_button.setStyleSheet("background-color: black;"
+        #                                 "border :0.5px solid gray;"
+        #                                 "color: orange")
+        #
+        # print(block_number)
+        #
+        #
+        #
+        # for i in range(0, random.randint(1, 504 - (len(self.list_of_blocks) + 1))):                 #### generate random food
+        #     food_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")
+        #     if food_button.palette().color(food_button.backgroundRole()).name() != 'black':
+        #         food_button.setProperty('text', '•')
+        #         font = QFont('Arial', 20)
+        #         food_button.setFont(font)
+        #         food_button.setStyleSheet("background-color: white;"
+        #                              "border :0.5px solid gray;"
+        #                              "color: orange")
+        #         self.list_of_foods.append(food_button.objectName())
+        #
+        #
+        #
+        # while self.pacmanFlag == False:
+        #     pacman_button = self.findChild(PushButton, f"{random.randint(1, 18)}-{random.randint(1, 28)}")         #### generate random pacman
+        #     self.pacman = [pacman_button.objectName()]
+        #     if pacman_button.palette().color(pacman_button.backgroundRole()).name() != 'black' and pacman_button.text() != '•':
+        #         pacman_button.setStyleSheet("background-color: white;"
+        #                              "border :0.5px solid gray;")
+        #         pixmap = QPixmap('./images/pacman_icon.png')
+        #         pixmap = pixmap.scaled(pacman_button.size(), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+        #         icon = QIcon(pixmap)
+        #         self.pacmanFlag = True
+        #         pacman_button.setIcon(icon)
+        #         for button in self.ButtonGroup.buttons():
+        #             button.setEnabled(True)
+        #
+        #
+        # print(self.list_of_blocks)
 
 
 app = QApplication(sys.argv)
