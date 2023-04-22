@@ -166,7 +166,7 @@ class MyWindow(QMainWindow):
     def click_for_block(self):
         sender = self.sender()
         sender.setProperty('text', '')
-        sender.setIcon(QIcon())
+        sender.setProperty('icon', QIcon())
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
             sender.setStyleSheet("background-color: black;"
                                  "border :0.5px solid gray;")
@@ -205,7 +205,8 @@ class MyWindow(QMainWindow):
 
     def click_for_food(self):
         sender = self.sender()
-        sender.setIcon(QIcon())
+        # sender.setIcon(QIcon())
+        sender.setProperty('icon', QIcon())
         if sender.property('is_food') == False:
             font = QFont('Arial', 20)
             sender.setProperty('text', '•')
@@ -223,20 +224,20 @@ class MyWindow(QMainWindow):
                                  "color: orange")
             self.list_of_foods.remove(sender.objectName())
 
-
     def click_for_pacman(self):
         sender = self.sender()
         pixmap = QPixmap('./images/pacman_icon.png')
         sender.setProperty('text', '')
+
         if not self.pacmanFlag:
             pixmap = pixmap.scaled(sender.size(), aspectRatioMode=Qt.KeepAspectRatio,
                                    transformMode=Qt.SmoothTransformation)
             icon = QIcon(pixmap)
-            sender.setIcon(icon)
+            sender.setProperty('icon', icon)
             self.pacmanFlag = True
             self.pacman.append(sender.objectName())
         else:
-            sender.setIcon(QIcon())
+            sender.setProperty('icon', QIcon())
             self.pacmanFlag = False
             self.pacman.remove(sender.objectName())
 
