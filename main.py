@@ -7,7 +7,7 @@ import enum
 from queue import PriorityQueue
 from PyQt5.QtGui import QColor, QPalette
 from PyQt5.QtGui import QPixmap, QIcon
-
+from Project import *
 
 class PushButton(QPushButton):
     def __init__(self, text, style, row, column, color, parent=None):
@@ -110,13 +110,13 @@ class MyWindow(QMainWindow):
         self.generateRandomPatternButton.clicked.connect(self.generate_random_pattern_button)
         self.searchButton = QPushButton('Search')
         self.searchButton.setFixedSize(80, 30)
-        # self.searchButton.clicked.connect(self.search_button)
+        self.searchButton.clicked.connect(self.search_button)
         self.form.addWidget(self.searchButton, 2, 4)
         self.timeOfExecutionLabel = QLabel('Time Of Execution:')
         self.timeOfExecutionLabel.setFixedSize(150, 30)
         self.form.addWidget(self.timeOfExecutionLabel, 3, 1)
         self.timeOfExecutionMessageBox = QPlainTextEdit()
-        self.timeOfExecutionMessageBox.setFixedSize(150, 30)
+        self.timeOfExecutionMessageBox.setFixedSize(200, 30)
         self.timeOfExecutionMessageBox.setEnabled(False)
         self.form.addWidget(self.timeOfExecutionMessageBox, 3, 2)
         self.openedNodeLabel = QLabel('Opened Node:')
@@ -286,7 +286,62 @@ class MyWindow(QMainWindow):
                     button.setEnabled(True)
 
 
+    def search_button(self):
+        ...
+        #self.list_of_blocks  self.list_of_foods self.pacman
 
+        ListBlock = []
+        Pacman = []
+        Food = []
+
+        for el in self.list_of_blocks :
+            temp = 0
+            temp2 = 0
+            for c in range(len(el)):
+                if(el[c]=='-'):
+                    temp = int(el[:c])
+                    temp2 = int(el[c+1:])
+            ListBlock.append((temp,temp2))
+        for el in self.list_of_foods :
+            temp = 0
+            temp2 = 0
+            for c in range(len(el)):
+                if(el[c]=='-'):
+                    temp = int(el[:c])
+                    temp2 = int(el[c+1:])
+            Food.append((temp,temp2))
+        for i in range(len(self.pacman[0])):
+            if(self.pacman[0][i]=='-'):
+                Pacman.append((int(self.pacman[0][0:i]) , int(self.pacman[0][i+1:])))
+
+        a = Searchalgorithm(Pacman , Food , ListBlock)
+        list_of_opened_nodes = []
+        direction_list = []
+        goldlist = a.BFS()
+        print(goldlist)
+
+        ###goldlist = [[direction_list=(x,y,number) ,  list_of_opened_nodes = (x,y) , solutionexists:bool ] , perf_time]
+        for x in goldlist[0][0]:
+            direction_list.append(f"{x[0]}-{x[1]}")
+        for x in goldlist[0][1]:
+            list_of_opened_nodes.append(f"{x[0]}-{x[1]}")
+
+
+
+        for opened in list_of_opened_nodes:
+            button = self.findChild(PushButton, opened)
+            button.setStyleSheet("background-color: yellow;"
+                                "border :0.5px solid gray;"
+                                "color: orange")
+        for index, value in enumerate(direction_list):
+            button = self.findChild(PushButton, value)
+            button.setStyleSheet("background-color: green;"
+                                "border :0.5px solid gray;"
+                                "color: orange")
+        self.timeOfExecutionMessageBox.setPlainText(str(goldlist[1]))
+        font = QFont()
+        font.setPointSize(9)
+        self.timeOfExecutionMessageBox.setFont(font)
 
 app = QApplication(sys.argv)
 w = MyWindow()
