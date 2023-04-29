@@ -27,11 +27,8 @@ class Searchalgorithm():
         self.BoardBorder = [(0,0) , (19,29)]
         self.RootNode = self.making_node(None , self.Pacman)[0]
         self.RootNodeForAStar = self.making_nodeForAStar(None , self.Pacman)[0]
-        #self.RootNodeForUCS = self.making_nodeForUCS(None , self.Pacman)[0]
-        self.RootNodeForIDS = self.making_nodeForIDS(None , self.Pacman)[0]
         self.ClosedList =  []
         self.count = 0
-        self.UCSDict = {}
 
     def time_calculation(func):
         @wraps(func)
