@@ -7,7 +7,7 @@ import enum
 from queue import PriorityQueue
 from PyQt5.QtGui import QColor, QPalette
 from PyQt5.QtGui import QPixmap, QIcon
-from Project import *
+from Algorithms import *
 
 
 
@@ -105,7 +105,7 @@ class MyWindow(QMainWindow):
         self.form.addWidget(self.algorithmLabel, 1, 0)
 
         self.algorithmCombobox = QComboBox()
-        self.algorithmCombobox.addItems(['DFS', 'BFS', 'A*', 'UCS', "IDS"])
+        self.algorithmCombobox.addItems(['DFS', 'BFS', 'A*'])
         self.algorithmCombobox.setFixedSize(150, 30)
         self.form.addWidget(self.algorithmCombobox, 1, 1)
 
@@ -213,15 +213,13 @@ class MyWindow(QMainWindow):
         sender = self.sender()
         sender.setProperty('text', '')
         if sender.palette().color(sender.backgroundRole()) == QColor('white'):
-            sender.setStyleSheet("background-color: black;"
-                                "border :0.5px solid gray;")
+            sender.setStyleSheet("background-color: black;")
             self.list_of_blocks.append(sender.objectName())
             sender.setProperty('is_block', True)
 
 
         elif sender.palette().color(sender.backgroundRole()) == QColor('black'):
-            sender.setStyleSheet("background-color: white;"
-                                "border :0.5px solid gray;")
+            sender.setStyleSheet("background-color: white;")
             self.list_of_blocks.remove(sender.objectName())
             sender.setProperty('is_block', False)
 
@@ -230,8 +228,7 @@ class MyWindow(QMainWindow):
 
     def clear_button(self):
         for button in self.ButtonGroup.buttons():
-            button.setStyleSheet("background-color: white;"
-                                 "border :0.5px solid gray;")
+            button.setStyleSheet("background-color: white;")
             button.setText('')
             button.setIcon(QIcon())
             button.setProperty('is_food', False)
@@ -267,7 +264,6 @@ class MyWindow(QMainWindow):
             sender.setProperty('text', '•')
             sender.setFont(font)
             sender.setStyleSheet("background-color: white;"
-                                 "border :0.5px solid gray;"
                                  "color: orange")
             self.list_of_foods.append(sender.objectName())
 
@@ -275,7 +271,6 @@ class MyWindow(QMainWindow):
             sender.setProperty('is_food', False)
             sender.setProperty('text', '')
             sender.setStyleSheet("background-color: white;"
-                                 "border :0.5px solid gray;"
                                  "color: orange")
             self.list_of_foods.remove(sender.objectName())
 
@@ -310,7 +305,6 @@ class MyWindow(QMainWindow):
                 block_button.setProperty('is_block', True)
                 self.list_of_blocks.append(block_button.objectName())
                 block_button.setStyleSheet("background-color: black;"
-                                           "border :0.5px solid gray;"
                                            "color: orange")
 
         for i in range(0, random.randint(1, 504 - (len(self.list_of_blocks) + 1))):  #### generate random food
@@ -321,7 +315,6 @@ class MyWindow(QMainWindow):
                 font = QFont('Arial', 20)
                 food_button.setFont(font)
                 food_button.setStyleSheet("background-color: white;"
-                                          "border :0.5px solid gray;"
                                           "color: orange")
                 self.list_of_foods.append(food_button.objectName())
 
@@ -331,8 +324,7 @@ class MyWindow(QMainWindow):
             self.pacman = [pacman_button.objectName()]
             if pacman_button.property('is_pacman') == False and pacman_button.property('is_food') == False and \
                     pacman_button.property('is_block') == False:
-                pacman_button.setStyleSheet("background-color: white;"
-                                            "border :0.5px solid gray;")
+                pacman_button.setStyleSheet("background-color: white;")
                 pixmap = QPixmap('./images/pacman_icon.png')
                 pacman_button.setProperty('is_pacman', True)
                 pixmap = pixmap.scaled(pacman_button.size(), aspectRatioMode=Qt.KeepAspectRatio,
@@ -351,9 +343,9 @@ class MyWindow(QMainWindow):
 
     def search_button(self):
 
-        BarricadeList = []
+        list_of_blocks = []
         Pacman = []
-        Food = []
+        list_of_foods = []
 
         for item in self.list_of_blocks :
             temp = 0
@@ -362,7 +354,7 @@ class MyWindow(QMainWindow):
                 if(item[ele]=='-'):
                     temp = int(item[:ele])
                     temp2 = int(item[ele+1:])
-            BarricadeList.append((temp,temp2))
+            list_of_blocks.append((temp,temp2))
         for item in self.list_of_foods :
             temp = 0
             temp2 = 0
@@ -370,47 +362,39 @@ class MyWindow(QMainWindow):
                 if(item[ele]=='-'):
                     temp = int(item[:ele])
                     temp2 = int(item[ele+1:])
-            Food.append((temp,temp2))
+            list_of_foods.append((temp,temp2))
         for i in range(len(self.pacman[0])):
             if(self.pacman[0][i]=='-'):
                 Pacman.append((int(self.pacman[0][0:i]) , int(self.pacman[0][i+1:])))
 
-        a = Searchalgorithm(Pacman , Food , BarricadeList,)
+        answer = Searchalgorithm(Pacman , list_of_foods , list_of_blocks,)
         list_of_opened_nodes = []
         direction_list = []
 
 
         if self.algorithmCombobox.currentIndex() == 0:                      #DFS algoritms
-            goldlist = a.DFS()
+            list_of_answ = answer.DFS()
 
         elif self.algorithmCombobox.currentIndex() == 1:                    #BFS algorithm
-            goldlist = a.BFS()
+            list_of_answ = answer.BFS()
 
         elif self.algorithmCombobox.currentIndex() == 2:                    #A* algorithm
-            goldlist = a.AStar()
+            list_of_answ = answer.AStar()
 
-        elif self.algorithmCombobox.currentIndex() == 3:                    #UCS algorithm
-            goldlist = a.UCS()
-
-        elif self.algorithmCombobox.currentIndex() == 4:                    #IDS algorithm
-            goldlist = a.IDSCaller(20)
-        print(goldlist[0])
-        if goldlist[2]==False:
-            for x in goldlist[0]:
+        if list_of_answ[2]==False:
+            for x in list_of_answ[0]:
                 direction_list.append(f"{x[0]}-{x[1]}")
-            for x in goldlist[1]:
+            for x in list_of_answ[1]:
                 list_of_opened_nodes.append(f"{x[0]}-{x[1]}")
 
 
             for opened in list_of_opened_nodes:
                 button = self.findChild(PushButton, opened)
                 button.setStyleSheet("background-color: yellow;"
-                                    "border :0.5px solid gray;"
                                     "color: orange")
             for index, value in enumerate(direction_list):
                 button = self.findChild(PushButton, value)
                 button.setStyleSheet("background-color: green;"
-                                    "border :0.5px solid gray;"
                                     "color: orange")
             error_box = QMessageBox.critical(None, "Error", "Couldn't Find Path For All Food", QMessageBox.Ok)
             if error_box == QMessageBox.Ok:
@@ -419,26 +403,24 @@ class MyWindow(QMainWindow):
 
         else:
 
-            for x in goldlist[0]:
+            for x in list_of_answ[0]:
                 direction_list.append(f"{x[0]}-{x[1]}")
-            for x in goldlist[1]:
+            for x in list_of_answ[1]:
                 list_of_opened_nodes.append(f"{x[0]}-{x[1]}")
 
 
             for opened in list_of_opened_nodes:
                 button = self.findChild(PushButton, opened)
                 button.setStyleSheet("background-color: yellow;"
-                                    "border :0.5px solid gray;"
                                     "color: orange")
             for index, value in enumerate(direction_list):
                 button = self.findChild(PushButton, value)
                 button.setStyleSheet("background-color: green;"
-                                    "border :0.5px solid gray;"
                                     "color: orange")
 
 
 
-            self.timeOfExecutionMessageBox.setPlainText(str(goldlist[3]))
+            self.timeOfExecutionMessageBox.setPlainText(str(list_of_answ[3]))
             font = QFont()
             font.setPointSize(9)
             self.timeOfExecutionMessageBox.setFont(font)

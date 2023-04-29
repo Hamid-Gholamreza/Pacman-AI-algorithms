@@ -1,5 +1,5 @@
 from Queue import *
-from Node import *
+from Nodes import *
 from dataclasses import dataclass, field
 from typing import Any
 import math
